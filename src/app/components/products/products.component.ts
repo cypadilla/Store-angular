@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { CreateProductDTO, Product } from '../../models/product.model';
+import { CreateProductDTO, Product, UpdateProductDTO } from '../../models/product.model';
 
 import { StoreService } from '../../services/store.service';
 import { ProductsService } from '../../services/products.service';
@@ -27,6 +27,8 @@ export class ProductsComponent implements OnInit {
     title :''
   };
   showProductDetail = false;
+  limit = 10; // Numero de items a cargar
+  offset = 0; // Salto en el array
 
   constructor(
     private storeService: StoreService,
@@ -36,10 +38,11 @@ export class ProductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.productsService.getAllProducts()
-    .subscribe(data => {
-      this.products = data;
-    });
+    // this.productsService.getAllProducts()
+    // .subscribe(data => {
+    //   this.products = data;
+    // });
+    this.loadMore()
   }
 
   onAddToShoppingCart(product: Product) {
@@ -80,5 +83,39 @@ export class ProductsComponent implements OnInit {
       console.log('Created', product);
       this.products.unshift(product)
     })
+  }
+
+  updateProduct(){
+    const changes : UpdateProductDTO = {
+      title : 'Nuevo titulo editado',
+      price : 200021
+    }
+
+    const id = this.product.id;
+    this.productsService.updateProduct(id,changes)
+    .subscribe(data => {
+      const product = this.products.findIndex(item => item.id === id)
+      this.products[product] = data;
+      this.product = data;
+    })
+  }
+
+  deleteProduct(){
+    const id = this.product.id;
+    this.productsService.deleteProduct(id)
+    .subscribe(response => {
+      console.log(response)
+      const product = this.products.findIndex(item => item.id === id)
+      this.products.splice(product,1);
+      this.showProductDetail = false;
+    });
+  }
+
+  loadMore(){
+    this.productsService.getProductsByPage(this.limit,this.offset)
+    .subscribe(data => {
+      this.products = this.products.concat(data);
+      this.offset += this.limit;
+    });
   }
 }
