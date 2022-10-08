@@ -5,6 +5,9 @@ import { CreateProductDTO, Product, UpdateProductDTO } from '../../models/produc
 import { StoreService } from '../../services/store.service';
 import { ProductsService } from '../../services/products.service';
 import SwiperCore from 'swiper';
+import Swal from 'sweetalert2';
+import { switchMap } from 'rxjs/operators';
+import { zip } from 'rxjs';
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
@@ -29,6 +32,7 @@ export class ProductsComponent implements OnInit {
   showProductDetail = false;
   limit = 10; // Numero de items a cargar
   offset = 0; // Salto en el array
+  statusDetail: 'loading' | 'success' | 'error'| 'init' = 'init';
 
   constructor(
     private storeService: StoreService,
@@ -51,11 +55,24 @@ export class ProductsComponent implements OnInit {
   }
 
   onShowDetail(id:string){
-    console.log(id)
+    this.statusDetail = 'loading';
     this.productsService.getProduct(id)
     .subscribe(product => {
       this.toggleProductDetail();
       this.product = product;
+      this.statusDetail = 'success';
+    },response=>{
+      this.toggleProductDetail();
+      console.log("We don't know this product",response)
+      this.statusDetail = 'error';
+      Swal.fire({
+        title:response,
+        icon:this.statusDetail,
+        toast:true,
+        timer:2000,
+        timerProgressBar:true,
+        showCancelButton:false
+      })
     });
   }
 
@@ -68,6 +85,24 @@ export class ProductsComponent implements OnInit {
   }
   onSlideChange() {
     console.log('slide change');
+  }
+
+  readAndUpdate(id: string){
+    this.productsService.getProduct(id)
+    .pipe(
+      //SwitchMap nos permite evitar el callback hell en este caso luego de la coma se puede agregar otro switch VARIAS DEPENDENCIAS
+      switchMap((product) => this.productsService.updateProduct(product.id, {title: 'change'})),
+    )
+    .subscribe(data => {
+     console.log(data)
+    })
+    this.productsService.fetchReadAndUpdate(id, {title:'change'})
+      // Me suscribo a estas peticiones, nos retorna el resultado en un array
+    .subscribe(response => {
+      const read = response [0];
+      const update = response [1];
+    })
+
   }
 
   createNewProduct(){

@@ -10,6 +10,7 @@ export interface Product {
   images: string[];
   description: string;
   category: Category;
+  taxes?:number;
 }
 //Omit nos permite extender de product y omitir el id y la categoria en cambio agregamos categoryId
 export interface CreateProductDTO extends Omit<Product,'id' | 'category'>{
