@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { Product } from './models/product.model';
+
 
 @Component({
   selector: 'app-root',
@@ -12,6 +12,11 @@ export class AppComponent {
   showImg = true;
 
 
+  constructor(
+
+  ){
+
+  }
   onLoaded(img: string) {
     console.log('log padre', img);
   }
@@ -19,4 +24,6 @@ export class AppComponent {
   toggleImg() {
     this.showImg = !this.showImg;
   }
+
+
 }

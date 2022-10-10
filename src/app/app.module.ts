@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule , HTTP_INTERCEPTORS} from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,6 +14,7 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
 import { SwiperModule } from 'swiper/angular';
 import SwiperCore, { Pagination } from "swiper";
+import { TimeInterceptor } from './intercerptors/time.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +33,9 @@ import SwiperCore, { Pagination } from "swiper";
     FormsModule,
     SwiperModule
   ],
-  providers: [],
+  providers: [
+    { provide :HTTP_INTERCEPTORS, useClass: TimeInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
