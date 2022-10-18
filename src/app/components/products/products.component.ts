@@ -80,9 +80,6 @@ export class ProductsComponent implements OnInit {
     this.showProductDetail = !this.showProductDetail;
   }
 
-  onSwiper([swiper]:any) {
-    console.log(swiper);
-  }
   onSlideChange() {
     console.log('slide change');
   }

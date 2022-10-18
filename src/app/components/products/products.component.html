@@ -16,7 +16,6 @@
      <h1>{{product.title}}</h1>
      <swiper
      [slidesPerView]="1"
-     (swiper)="onSwiper($event)"
      (slideChange)="onSlideChange()"
       >
         <ng-template swiperSlide *ngFor="let img of product.images">
