@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { CreateProductDTO, Product, UpdateProductDTO } from '../../models/product.model';
 
@@ -14,10 +14,10 @@ import { zip } from 'rxjs';
   styleUrls: ['./products.component.scss']
 })
 export class ProductsComponent implements OnInit {
-
   myShoppingCart: Product[] = [];
   total = 0;
-  products: Product[] = [];
+  @Input () products: Product[] = [];
+  @Output() loadMore = new EventEmitter<string>();
   product: Product = {
     id:'',
     category : {
@@ -46,7 +46,8 @@ export class ProductsComponent implements OnInit {
     // .subscribe(data => {
     //   this.products = data;
     // });
-    this.loadMore()
+    // this.loadMore()
+    console.log('carga home');
   }
 
   onAddToShoppingCart(product: Product) {
@@ -143,11 +144,4 @@ export class ProductsComponent implements OnInit {
     });
   }
 
-  loadMore(){
-    this.productsService.getProductsByPage(this.limit,this.offset)
-    .subscribe(data => {
-      this.products = this.products.concat(data);
-      this.offset += this.limit;
-    });
-  }
 }

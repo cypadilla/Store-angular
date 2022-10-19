@@ -8,7 +8,7 @@
     (showProduct)="onShowDetail($event)"
   ></app-product>
 </div>
-<button (click)="loadMore()">Cargar Mas</button>
+<button (click)="loadMore.emit()">Cargar Mas</button>
 <div class="product-detail" [class.active] ="showProductDetail">
   {{statusDetail}}
   <div *ngIf="product">

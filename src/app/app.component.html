@@ -1,13 +1,14 @@
 <app-nav></app-nav>
-<a href="../assets/files/texto.txt" download> Descargar</a>
+<!-- <a href="../assets/files/texto.txt" download> Descargar</a>
 <button (click)="downloadPDF()" download> Descargar</button>
 
 <div>
   <input type="file" (change)="onUpload($event)">
   <img *ngIf="imgRta" [src]="imgRta" alt="">
-</div>
+</div> -->
+<router-outlet></router-outlet>
+<!-- <app-products></app-products> -->
 
-<app-products></app-products>
 <!-- <p><input type="text" [(ngModel)]="imgParent" /></p>
 <button (click)="toggleImg()">Toggle Img</button>
 <p>{{ showImg}}</p>

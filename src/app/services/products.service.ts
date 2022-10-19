@@ -10,7 +10,7 @@ import { checkTime } from '../interceptors/time.interceptor';
   providedIn: 'root'
 })
 export class ProductsService {
-  private API_URL = `${environment.API_URL}/api/products`;
+  private API_URL = `${environment.API_URL}/api/`;
   constructor(
     private http: HttpClient
   ) { }
@@ -23,14 +23,27 @@ export class ProductsService {
       params = params.set('limit',limit);
       params = params.set('offset',offset);
     }
-    return this.http.get<Product[]>(this.API_URL, { params })
+    return this.http.get<Product[]>(`${this.API_URL}/products`, { params })
+    .pipe(
+      retry(3)
+    );
+  }
+
+  getByCategory (categoryId: string, limit?: number, offset?:number){
+    let params = new HttpParams();
+    if(limit && offset){
+      console.log('hola')
+      params = params.set('limit',limit);
+      params = params.set('offset',offset);
+    }
+    return this.http.get<Product[]>(`${this.API_URL}/categories/${categoryId}/products`, { params })
     .pipe(
       retry(3)
     );
   }
 
   getProduct(id:string){
-    return this.http.get<Product>(`${this.API_URL}/${id}`)
+    return this.http.get<Product>(`${this.API_URL}/products/${id}`)
     .pipe(
       catchError((error: HttpErrorResponse) => {
         if(error.status === HttpStatusCode.InternalServerError){
@@ -48,7 +61,7 @@ export class ProductsService {
   }
 
   getProductsByPage(limit: number, offset: number){
-    return this.http.get<Product[]>(this.API_URL,{
+    return this.http.get<Product[]>(`${this.API_URL}/products`,{
       params:{limit,offset},
       context:checkTime()
     })
@@ -72,14 +85,14 @@ export class ProductsService {
   }
 
   createProduct(data:CreateProductDTO){
-    return this.http.post<Product>(this.API_URL,data)
+    return this.http.post<Product>(`${this.API_URL}/products`,data)
   }
 
   updateProduct(id:string ,data:UpdateProductDTO){
-    return this.http.put<Product>(`${this.API_URL}/${id}`,data)
+    return this.http.put<Product>(`${this.API_URL}/products/${id}`,data)
   }
 
   deleteProduct(id: string){
-    return this.http.delete<Boolean>(`${this.API_URL}/${id}`)
+    return this.http.delete<Boolean>(`${this.API_URL}/products/${id}`)
   }
 }
