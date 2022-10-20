@@ -1,5 +1,6 @@
 <button (click)="createNewProduct()">Create Product Fake</button>
 <button (click)="onShowDetail('2342394872')">Detail not found</button>
+<div *ngIf="products.length === 0">cargando</div>
 <div class="products--grid">
   <app-product
     [product]="product"
