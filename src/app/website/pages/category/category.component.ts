@@ -16,6 +16,7 @@ export class CategoryComponent implements OnInit {
   limit = 10; // Numero de items a cargar
   offset = 0; // Salto en el array
   products: Product[] = [];
+  productId: null | string = null;
   constructor(
     private activateRoute:ActivatedRoute,
     private productsService:ProductsService
@@ -34,6 +35,11 @@ export class CategoryComponent implements OnInit {
     )
     .subscribe(data =>{
         this.products = data;
+    })
+    this.activateRoute.queryParamMap
+    .subscribe(param =>{
+      this.productId = param.get('product');
+      console.log(this.productId)
     })
   }
 

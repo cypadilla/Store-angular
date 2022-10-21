@@ -10,7 +10,7 @@ import { checkTime } from '../interceptors/time.interceptor';
   providedIn: 'root'
 })
 export class ProductsService {
-  private API_URL = `${environment.API_URL}/api/`;
+  private API_URL = `${environment.API_URL}/api`;
   constructor(
     private http: HttpClient
   ) { }

@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { CreateProductDTO, Product, UpdateProductDTO } from '../../models/product.model';
+import { CreateProductDTO, Product, UpdateProductDTO } from '../../../models/product.model';
 
-import { StoreService } from '../../services/store.service';
-import { ProductsService } from '../../services/products.service';
+import { StoreService } from '../../../services/store.service';
+import { ProductsService } from '../../../services/products.service';
 import SwiperCore from 'swiper';
 import Swal from 'sweetalert2';
 import { switchMap } from 'rxjs/operators';
@@ -17,6 +17,11 @@ export class ProductsComponent implements OnInit {
   myShoppingCart: Product[] = [];
   total = 0;
   @Input () products: Product[] = [];
+  // @Input () productId: string | null = null;
+  @Input ()
+  set productId (id: string | null){
+    if(id) this.onShowDetail(id);
+  };
   @Output() loadMore = new EventEmitter<string>();
   product: Product = {
     id:'',
@@ -57,13 +62,14 @@ export class ProductsComponent implements OnInit {
 
   onShowDetail(id:string){
     this.statusDetail = 'loading';
+    if(!this.showProductDetail){
+      this.showProductDetail = true;
+    }
     this.productsService.getProduct(id)
     .subscribe(product => {
-      this.toggleProductDetail();
       this.product = product;
       this.statusDetail = 'success';
     },response=>{
-      this.toggleProductDetail();
       console.log("We don't know this product",response)
       this.statusDetail = 'error';
       Swal.fire({

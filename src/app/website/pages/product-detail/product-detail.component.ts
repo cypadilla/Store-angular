@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
@@ -12,7 +13,7 @@ import { StoreService } from 'src/app/services/store.service';
 })
 export class ProductDetailComponent implements OnInit {
   productId: string | null = null;
-  product: Product = {
+  product:null | Product = {
     id: '',
     price: 0,
     images: [],
@@ -27,7 +28,8 @@ export class ProductDetailComponent implements OnInit {
   constructor(
     private activateRoute:ActivatedRoute,
     private productsService:ProductsService,
-    private storeService:StoreService
+    private storeService:StoreService,
+    private location:Location
   ) { }
 
   ngOnInit(): void {
@@ -38,7 +40,7 @@ export class ProductDetailComponent implements OnInit {
         if(this.productId){
            return this.productsService.getProduct(this.productId)
         }
-        return [];
+        return [null];
       })
     )
     .subscribe(data =>{
@@ -49,6 +51,10 @@ export class ProductDetailComponent implements OnInit {
 
   onAddToShoppingCart(product: Product) {
     this.storeService.addProduct(product);
+  }
+
+  goToBack(){
+    this.location.back();
   }
 
 }
