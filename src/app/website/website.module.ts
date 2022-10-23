@@ -2,13 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { WebsiteRoutingModule } from './website-routing.module';
-import { ImgComponent } from './components/img/img.component';
-import { ProductComponent } from './components/product/product.component';
-import { ProductsComponent } from './components/products/products.component';
 import { NavComponent } from './components/nav/nav.component';
-import { ReversePipe } from './pipes/reverse.pipe';
-import { TimeAgoPipe } from './pipes/time-ago.pipe';
-import { HighlightDirective } from './directives/highlight.directive';
 import { HomeComponent } from './pages/home/home.component';
 // import { NotFoundComponent } from '../not-found/not-found.component';
 import { CategoryComponent } from './pages/category/category.component';
@@ -22,15 +16,10 @@ import { LayoutComponent } from './layout/layout.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { SwiperModule } from 'swiper/angular';
+import { SharedModule } from '../shared/shared.module';
 @NgModule({
   declarations: [
-    ImgComponent,
-    ProductComponent,
-    ProductsComponent,
     NavComponent,
-    ReversePipe,
-    TimeAgoPipe,
-    HighlightDirective,
     HomeComponent,
     // NotFoundComponent,
     CategoryComponent,
@@ -47,7 +36,8 @@ import { SwiperModule } from 'swiper/angular';
     WebsiteRoutingModule,
     HttpClientModule,
     FormsModule,
-    SwiperModule
+    SwiperModule,
+    SharedModule
   ]
 })
 export class WebsiteModule { }
