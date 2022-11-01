@@ -6,6 +6,7 @@ import { StoreService } from '../../../services/store.service'
 import { User } from 'src/app/models/user.model';
 import { CategoriesService } from 'src/app/services/categories.service';
 import { Category } from 'src/app/models/product.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav',
@@ -23,7 +24,8 @@ export class NavComponent implements OnInit {
     private storeService: StoreService,
     private authService: AuthService,
     private usersSevice:UsersService,
-    private categoriesService:CategoriesService
+    private categoriesService:CategoriesService,
+    private router:Router
   ) { }
 
   ngOnInit(): void {
@@ -31,6 +33,8 @@ export class NavComponent implements OnInit {
       this.counter = products.length;
     });
     this.getAllCategories();
+    this.authService.user$.
+    subscribe(data => this.profile = data)
   }
 
   toggleMenu() {
@@ -39,9 +43,10 @@ export class NavComponent implements OnInit {
 
   createUser(){
     this.usersSevice.createUser({
-      name:'sebas',
-      email:'sebas@gmail.com',
-      password:'123123'
+      name:'Cristian',
+      email:'cristian@gmail.com',
+      password:'123123',
+      role:'customer'
     })
     .subscribe(rta=>{
       console.log(rta);
@@ -57,11 +62,15 @@ export class NavComponent implements OnInit {
     //   this.getProfile();
     // })
     this.authService.loginAndGet(
-      'sebas@gmail.com',
-      '123123'
+      'admin@mail.com',
+      'admin123'
       )
-      .subscribe(data =>{
-        this.profile = data;
+    // this.authService.loginAndGet(
+    //   'cristian@gmail.com',
+    //   '123123'
+    //   )
+      .subscribe(() =>{
+        this.router.navigate(['/profile'])
       })
   }
   // loginAndGetProfile(){
@@ -86,6 +95,12 @@ export class NavComponent implements OnInit {
     .subscribe(categories => {
       this.categories = categories;
     })
+  }
+
+  logOut(){
+    this.authService.logOut();
+    this.profile = null;
+    this.router.navigate(['/home']);
   }
 
 }
